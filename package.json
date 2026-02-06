@@ -11,6 +11,8 @@
   },
   "dependencies": {
     "csv-parse": "^6.1.0",
+    "effect": "^3.19.16",
+    "project1": ".",
     "xlsx": "^0.18.5"
   }
 }
