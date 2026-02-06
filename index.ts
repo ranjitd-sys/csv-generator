@@ -1,0 +1,16 @@
+import { readFile, utils } from 'xlsx';
+
+// 1. Load the workbook
+const workbook = readFile('data.xlsx');
+
+// 2. Get the name of the first sheet
+const sheetName = workbook.SheetNames[0];
+
+// 3. Get the content of that sheet
+const worksheet = workbook.Sheets[sheetName] ;
+
+// 4. Convert the sheet data to JSON and print it
+const data = utils.sheet_to_json(worksheet);
+
+console.log("--- Spreadsheet Data ---");
+data.map(data =>  console.log(data))

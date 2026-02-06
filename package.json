@@ -1,0 +1,16 @@
+{
+  "name": "project1",
+  "module": "index.ts",
+  "type": "module",
+  "private": true,
+  "devDependencies": {
+    "@types/bun": "latest"
+  },
+  "peerDependencies": {
+    "typescript": "^5"
+  },
+  "dependencies": {
+    "csv-parse": "^6.1.0",
+    "xlsx": "^0.18.5"
+  }
+}
