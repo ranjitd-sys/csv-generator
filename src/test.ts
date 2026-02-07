@@ -1,7 +1,7 @@
 import { Record } from "effect";
 import { feeFields, type FeeField, type TransactionRecord } from "./types";
 
-const test = [
+const test : TransactionRecord[] = [
   {
     __rowNum__: 149,
     "Transaction Date": "06-DEC-2025",
@@ -79,16 +79,61 @@ const test = [
 ];
 
 function getNonZeroFeesPerRow(
-  records: TransactionRecord[]
+  records: TransactionRecord[],
 ): Array<Partial<Record<FeeField, number>>> {
   return records.map((row) =>
-    
     Object.fromEntries(
       feeFields
         .filter((key) => row[key] !== 0)
-        .map((key) => [key,{"TrasnactionType":key,"transactionAmount":row[key]},row["Transaction Date"],row["Order Invoice Date"], ])
-    )
+        .map((key) => [
+          key,
+          { TrasnactionType: key, 
+            transactionAmount: row[key], 
+            "Order Invoice Date":row["Order Invoice Date"],
+            orderId:row["Sub Order No"],
+            invoiceNumbr:row["Invoice Number"],
+            "Hsn Code":row["Hsn Code"],
+            cgs:row.Cgst,
+            sgst:row.Sgst,
+            igst:row.Igst,
+            taxRate:row["Tax Rate"]
+            }
+          
+        ]),
+    ),
   );
 }
-const res = getNonZeroFeesPerRow(test)
-console.log(res);
+
+type FeeDetail = {
+    TrasnactionType: string;
+  transactionAmount: number;
+  "Order Invoice Date": string;
+  orderId: string;
+  invoiceNumbr: string;
+  "Hsn Code": string;
+  cgs: number;
+  sgst: number;
+  igst: number;
+  taxRate: number;
+};
+
+function flattenFees(data: Array<Record<string, FeeDetail>>) {
+  return data.flatMap((order) =>
+    Object.entries(order).map(([feeType, detail]) => ({
+      feeType,
+      transactionAmount: detail.transactionAmount,
+      orderId: detail.orderId,
+      invoiceNumber: detail.invoiceNumbr,
+      orderDate: detail["Order Invoice Date"],
+      hsnCode: detail["Hsn Code"],
+      cgst: detail.cgs,
+      sgst: detail.sgst,
+      igst: detail.igst,
+      taxRate: detail.taxRate,
+    }))
+  );
+}
+
+const res = getNonZeroFeesPerRow(test);
+const mainrepose = flattenFees(res);
+console.log(mainrepose)
