@@ -2,8 +2,7 @@ import { readFile, utils, type WorkSheet } from 'xlsx';
 import type { TransactionRecord } from './types';
 import {  Effect } from 'effect';
 import { NotFound } from './error';
-import { cons } from 'effect/List';
-;
+import { constantFrom } from 'effect/FastCheck';
 
 export const convertData = Effect.gen(function* () {
     const data = yield* Effect.try({
@@ -18,5 +17,5 @@ export const convertData = Effect.gen(function* () {
     });
     return data;
 })
-const res = await Effect.runPromise(convertData);
-console.log(res.map(data => data['Transaction Type']))
+ const marketPlace = await Effect.runPromise(convertData);
+export const marketPlaceData = marketPlace.map(date => date['Transaction Type']);
