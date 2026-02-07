@@ -35,3 +35,12 @@ export interface TransactionRecord {
   "Cash Discount / Adjustment": number;
   "Total Commission Amount": number;
 }
+
+export const feeFields = [
+  "Courier Fee",
+  "Closing Fee",
+  "Marketing Fee",
+  "Fulfillment Fee",
+  "Payment Collection Fee",
+  "Compensation Cess"
+];

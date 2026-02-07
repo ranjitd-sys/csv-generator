@@ -5,9 +5,9 @@
     "": {
       "name": "project1",
       "dependencies": {
+        "project1": ".",
         "csv-parse": "^6.1.0",
         "effect": "^3.19.16",
-        "project1": ".",
         "xlsx": "^0.18.5",
       },
       "devDependencies": {
