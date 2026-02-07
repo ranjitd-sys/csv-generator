@@ -1,7 +1,7 @@
 import { Record } from "effect";
 import { feeFields, type FeeField, type TransactionRecord } from "./types";
 
-const test : TransactionRecord[] = [
+export const test : TransactionRecord[] = [
   {
     __rowNum__: 149,
     "Transaction Date": "06-DEC-2025",
@@ -80,7 +80,7 @@ const test : TransactionRecord[] = [
 
 function getNonZeroFeesPerRow(
   records: TransactionRecord[],
-): Array<Partial<Record<FeeField, number>>> {
+){
   return records.map((row) =>
     Object.fromEntries(
       feeFields
