@@ -12,5 +12,5 @@ const csv = stringify(serilize2, {
 });
 
 console.log(csv)
-await Bun.write("../output/date.csv", csv)
+await Bun.write("../output/output.csv", csv)
 
