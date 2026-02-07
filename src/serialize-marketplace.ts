@@ -2,12 +2,14 @@ import { readFile, utils, type WorkSheet } from 'xlsx';
 import type { TransactionRecord } from './types';
 import {  Effect } from 'effect';
 import { NotFound } from './error';
+import { cons } from 'effect/List';
+;
 
 export const convertData = Effect.gen(function* () {
     const data = yield* Effect.try({
         try: () => {
             const workbook = readFile('../public/data.xlsx');
-            const sheetName = workbook.SheetNames[4];
+            const sheetName = workbook.SheetNames[2];
             const worksheet = workbook.Sheets[sheetName || ""];
             if (!worksheet) throw new NotFound();
             return utils.sheet_to_json<TransactionRecord>(worksheet)
@@ -16,3 +18,5 @@ export const convertData = Effect.gen(function* () {
     });
     return data;
 })
+const res = await Effect.runPromise(convertData);
+console.log(res.map(data => data['Transaction Type']))
