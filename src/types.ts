@@ -42,5 +42,7 @@ export const feeFields = [
   "Marketing Fee",
   "Fulfillment Fee",
   "Payment Collection Fee",
-  "Compensation Cess"
-];
+  "Compensation Cess",
+] as const;
+
+export type FeeField = typeof feeFields[number];

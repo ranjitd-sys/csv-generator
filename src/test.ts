@@ -1,7 +1,8 @@
-import { feeFields, type TransactionRecord } from "./types";
+import { Record } from "effect";
+import { feeFields, type FeeField, type TransactionRecord } from "./types";
 
 const test = [
-    {
+  {
     __rowNum__: 149,
     "Transaction Date": "06-DEC-2025",
     "Transaction Type": "COD Vendor Invoice",
@@ -37,7 +38,8 @@ const test = [
     Other: 0,
     "Cash Discount / Adjustment": 0,
     "Total Commission Amount": -69.5,
-  }, {
+  },
+  {
     __rowNum__: 150,
     "Transaction Date": "06-DEC-2025",
     "Transaction Type": "COD Vendor Invoice",
@@ -75,22 +77,18 @@ const test = [
     "Total Commission Amount": -67.5,
   },
 ];
-function extractNonZeroFees(row:TransactionRecord){
-  const fees  = {};
 
-  for (const key of feeFields) {
-    console.log(key)
-    const value = Number(row[key]);
-    if (!Number.isNaN(value) && value !== 0) {
-      fees[key] = value;
-    }
-  }
-
-  return fees;
+function getNonZeroFeesPerRow(
+  records: TransactionRecord[]
+): Array<Partial<Record<FeeField, number>>> {
+  return records.map((row) =>
+    
+    Object.fromEntries(
+      feeFields
+        .filter((key) => row[key] !== 0)
+        .map((key) => [key,{"TrasnactionType":key,"transactionAmount":row[key]},row["Transaction Date"],row["Order Invoice Date"], ])
+    )
+  );
 }
-
-
-
-console.log(extractNonZeroFees(test))
-
-// console.log(test);
+const res = getNonZeroFeesPerRow(test)
+console.log(res);

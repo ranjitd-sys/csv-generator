@@ -4,6 +4,8 @@ import { Data, Effect } from 'effect';
 import { NotFound } from './error';
 import { daemonChildren } from 'effect/Effect';
 
+import { Record } from "effect";
+import { feeFields, type FeeField } from "./types";
 
 export const convertData = Effect.gen(function* () {
     const data = yield* Effect.try({
@@ -19,21 +21,17 @@ export const convertData = Effect.gen(function* () {
     return data;
 })
 
-export const main = Effect.gen(function* () {
-    const jsonCsv = yield* convertData;
-    const filterDate = jsonCsv.filter(res => {
-        if (res['Closing Fee'] !== 0 || 
-            res['Courier Fee'] !== 0 || 
-            res['Compensation Cess'] !== 0 ||
-             res['Marketing Fee'] !== 0 ||
-             res['Fulfillment Fee']||
-
-              res['Payment Collection Fee']) {
-                return res;
-        }
-    })
-    console.log(filterDate)
-})
-
-const res = await Effect.runPromise(main);
+function getNonZeroFeesPerRow(
+  records: TransactionRecord[]
+): Array<Partial<Record<FeeField, number>>> {
+  return records.map((row) =>
+    Object.fromEntries(
+      feeFields
+        .filter((key) => row[key] !== 0)
+        .map((key) => [key, row[key]])
+    )
+  );
+}
+const data = await Effect.runPromise(convertData)
+const res = getNonZeroFeesPerRow(data);
 console.log(res)
